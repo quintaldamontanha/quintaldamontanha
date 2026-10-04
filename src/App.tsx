@@ -3,6 +3,7 @@ import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-
 import type { Session } from '@supabase/supabase-js'
 import { supabase } from './lib/supabase'
 import ProductsPage from './ProductsPage'
+import ReservationsPage from './ReservationsPage'
 
 const ADMIN_EMAIL='quintaldamontanha@gmail.com'
 const money=(v:any)=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})
@@ -55,20 +56,13 @@ function Cash(){
  return <div className="panel"><h2>Caixa</h2>{open?<div className="cash-status"><span className="status ok">Caixa aberto</span><p>Aberto em {new Date(open.opened_at).toLocaleString('pt-BR')} · Fundo inicial {money(open.opening_amount)}</p><div className="inline-form"><input type="number" step="0.01" placeholder="Dinheiro contado" value={informed} onChange={e=>setInformed(e.target.value)}/><button onClick={close}>Fechar caixa</button></div></div>:<div><span className="status">Caixa fechado</span><div className="inline-form"><input type="number" step="0.01" value={opening} onChange={e=>setOpening(e.target.value)} placeholder="Fundo inicial"/><button onClick={start}>Abrir caixa</button></div></div>}</div>
 }
 
-function Reservations(){
- const [rows,setRows]=useState<Row[]>([]),[form,setForm]=useState<any>({customer_name:'',phone:'',reservation_date:today(),reservation_time:'19:00',party_size:2});const load=async()=>{const {data}=await supabase.from('reservations').select('*').order('reservation_date',{ascending:true}).order('reservation_time');setRows(data||[])};useEffect(()=>{load()},[])
- async function save(e:FormEvent){e.preventDefault();const {error}=await supabase.from('reservations').insert({...form,party_size:Number(form.party_size),status:'pending'});if(error)alert(error.message);else{setForm({...form,customer_name:'',phone:''});load()}}
- async function status(id:string,status:string){await supabase.from('reservations').update({status}).eq('id',id);load()}
- return <div className="grid-two"><div className="panel"><h2>Nova reserva</h2><form className="form-grid" onSubmit={save}><label>Cliente<input required value={form.customer_name} onChange={e=>setForm({...form,customer_name:e.target.value})}/></label><label>Telefone<input value={form.phone} onChange={e=>setForm({...form,phone:e.target.value})}/></label><label>Data<input type="date" required value={form.reservation_date} onChange={e=>setForm({...form,reservation_date:e.target.value})}/></label><label>Hora<input type="time" value={form.reservation_time} onChange={e=>setForm({...form,reservation_time:e.target.value})}/></label><label>Pessoas<input type="number" min="1" required value={form.party_size} onChange={e=>setForm({...form,party_size:e.target.value})}/></label><button>Salvar reserva</button></form></div><div className="panel"><h2>Reservas</h2>{rows.map(r=><div className="list-row" key={r.id}><div><strong>{r.customer_name}</strong><small>{r.reservation_code} · {r.reservation_date} {r.reservation_time?.slice(0,5)} · {r.party_size} pessoas</small></div><select value={r.status} onChange={e=>status(r.id,e.target.value)}><option value="pending">Pendente</option><option value="confirmed">Confirmada</option><option value="cancelled">Cancelada</option><option value="completed">Concluída</option><option value="no_show">Não compareceu</option></select></div>)}</div></div>
-}
-
 function Events(){
  const [rows,setRows]=useState<Row[]>([]),[form,setForm]=useState<any>({name:'',event_date:today(),start_time:'19:00',price:'0',capacity:'0',status:'published'});const load=async()=>{const {data}=await supabase.from('events').select('*').order('event_date',{ascending:true});setRows(data||[])};useEffect(()=>{load()},[])
  async function save(e:FormEvent){e.preventDefault();const {error}=await supabase.from('events').insert({...form,price:Number(form.price),capacity:Number(form.capacity)});if(error)alert(error.message);else{setForm({...form,name:''});load()}}
  return <div className="grid-two"><div className="panel"><h2>Novo evento</h2><form className="form-grid" onSubmit={save}><label>Nome<input required value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/></label><label>Data<input type="date" required value={form.event_date} onChange={e=>setForm({...form,event_date:e.target.value})}/></label><label>Horário<input type="time" value={form.start_time} onChange={e=>setForm({...form,start_time:e.target.value})}/></label><label>Preço<input type="number" step="0.01" value={form.price} onChange={e=>setForm({...form,price:e.target.value})}/></label><label>Capacidade<input type="number" value={form.capacity} onChange={e=>setForm({...form,capacity:e.target.value})}/></label><button>Publicar evento</button></form></div><div className="panel"><h2>Eventos</h2>{rows.map(r=><div className="list-row" key={r.id}><div><strong>{r.name}</strong><small>{r.event_date} · {r.start_time?.slice(0,5)} · {money(r.price)} · {r.capacity} lugares</small></div><span className="status ok">{r.status}</span></div>)}</div></div>
 }
 
-const modules:any={Dashboard:Dashboard,Produtos:ProductsPage,Estoque:Stock,Mesas:Tables,Comandas:Commands,Caixa:Cash,Reservas:Reservations,Eventos:Events}
+const modules:any={Dashboard:Dashboard,Produtos:ProductsPage,Estoque:Stock,Mesas:Tables,Comandas:Commands,Caixa:Cash,Reservas:ReservationsPage,Eventos:Events}
 const slugs:any={Dashboard:'',Produtos:'produtos',Estoque:'estoque',Mesas:'mesas',Comandas:'comandas',Caixa:'caixa',Reservas:'reservas',Eventos:'eventos'}
 const slugPages:any=Object.fromEntries(Object.entries(slugs).map(([key,value])=>[value,key]))
 
