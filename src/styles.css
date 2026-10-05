@@ -1,1 +1,351 @@
 :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1b2f25;background:#f4f1ea}*{box-sizing:border-box}html,body,#root{max-width:100%}body{margin:0;overflow-x:hidden}button,input,select{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}.hero{min-height:100vh;display:grid;place-items:center;padding:40px;background:linear-gradient(rgba(20,38,29,.72),rgba(20,38,29,.72)),url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80') center/cover}.overlay{max-width:900px;color:#fff}.eyebrow{letter-spacing:.22em;font-weight:800;color:#d7b56d;font-size:.75rem}.eyebrow.dark{color:#5c6e5f}.hero h1{font-family:Georgia,serif;font-size:clamp(3rem,7vw,6rem);line-height:.95;margin:.2em 0}.hero p{font-size:1.15rem;max-width:650px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.actions a,.login button,.form-grid button,.inline-form button,.mini-card button{background:#d7b56d;color:#1d2d25;padding:12px 17px;border-radius:10px;font-weight:800;border:0}.login{min-height:100vh;display:grid;place-items:center;padding:24px;background:#183025}.login form{width:min(440px,100%);background:#fffaf0;padding:34px;border-radius:22px;box-shadow:0 20px 80px rgba(0,0,0,.25)}.login h1{font-family:Inter,ui-sans-serif,system-ui,sans-serif;margin:.3rem 0}.login label,.form-grid label{display:grid;gap:7px;margin:12px 0;font-weight:700;font-size:.9rem}.login input,.form-grid input,.form-grid select,.inline-form input,.inline-form select,.list-row select{padding:11px 12px;border-radius:9px;border:1px solid #d7d3c8;background:#fff}.login button{width:100%;margin-top:12px}.login button:disabled{opacity:.6}.error{background:#fbe8e6;color:#8b2f27;padding:10px;border-radius:10px}.admin{min-height:100vh;display:grid;grid-template-columns:238px minmax(0,1fr);background:#f4f1ea;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;max-width:100%;overflow-x:hidden}.admin *{font-family:inherit}.admin aside{background:#183025;color:#fff;padding:24px 18px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh;min-width:0}.admin aside strong{font-size:1.15rem;font-weight:750}.admin nav{display:grid;gap:4px}.admin nav button{background:transparent;border:0;color:#e9efe9;text-align:left;padding:10px 12px;border-radius:9px}.admin nav button:hover,.admin nav button.active{background:rgba(255,255,255,.1);color:#e4c885}.logout{margin-top:auto;padding:10px;border:1px solid rgba(255,255,255,.22);background:transparent;color:white;border-radius:9px}.admin section{padding:24px 26px;min-width:0;width:100%;max-width:100%;overflow-x:hidden}.admin header{display:flex;justify-content:space-between;gap:20px;align-items:end;min-width:0}.admin header>div:first-child{min-width:0}.admin header span{font-size:.76rem;color:#77817b;font-weight:650}.admin header h1{font-size:1.55rem;line-height:1.2;margin:.18rem 0 0;font-weight:760;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.user-chip{background:#fff;border:1px solid #e2ddd1;border-radius:10px;padding:9px 13px;font-weight:700;max-width:260px}.user-chip small{display:block;color:#768076;font-weight:500}.metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:24px}.metrics article,.panel{background:white;border:1px solid #e2ddd1;border-radius:12px;padding:20px}.metrics article span,.metrics article small{display:block;color:#7a817a}.metrics article strong{display:block;font-size:1.55rem;margin:8px 0}.panel{margin-top:18px}.panel h2{margin-top:0;font-family:inherit;font-size:1.05rem}.grid-two{display:grid;grid-template-columns:minmax(320px,.8fr) minmax(0,1.5fr);gap:18px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.form-grid button,.form-grid small{align-self:end;margin:12px 0}.check{display:flex!important;grid-column:1/-1;align-items:center;flex-direction:row}.inline-form{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}.inline-form input,.inline-form select{min-width:120px;flex:1}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:11px 8px;border-bottom:1px solid #eee8dc}td small{display:block;color:#7b817a}.link{border:0;background:transparent;color:#315c43;font-weight:800}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.mini-card{border:1px solid #e7e1d4;border-radius:12px;padding:14px;display:grid;gap:8px}.mini-card small{color:#757e77}.stock-row,.list-row,.order-items>div,.total{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid #eee8dc}.list-row small{display:block;color:#7b817a;margin-top:4px}.danger{color:#a1392e}.warning{display:block;color:#8b6427;margin-top:12px}.status{display:inline-flex;padding:6px 9px;border-radius:999px;background:#eee7d9;font-size:.8rem;font-weight:800}.status.ok{background:#e1efe5;color:#28553b}.command-row{width:100%;display:flex;justify-content:space-between;border:1px solid #e5ded1;background:#fff;padding:12px;margin:7px 0;border-radius:10px}.command-row.active{border-color:#9b7c3f;background:#fbf5e8}.order-items{margin-top:15px}.total{font-size:1.2rem;border-top:2px solid #d8d0bf;margin-top:12px}.cash-status p{color:#657067}@media(max-width:1100px){.metrics{grid-template-columns:repeat(2,1fr)}.grid-two{grid-template-columns:1fr}.admin section{padding:22px 20px}}@media(max-width:760px){.admin{grid-template-columns:1fr}.admin aside{position:static;height:auto}.admin nav{grid-template-columns:repeat(4,minmax(0,1fr))}.admin nav button{text-align:center;font-size:.8rem;min-width:0;overflow:hidden;text-overflow:ellipsis}.logout{margin-top:0}.admin section{padding:18px}.admin header{align-items:flex-start;flex-direction:column}.metrics{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.cards{grid-template-columns:1fr}}
+/* =========================================================
+   SIDEBAR ADMIN - QUINTAL DA MONTANHA
+   ========================================================= */
+
+.admin {
+  min-height: 100vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  background: #f5f2ea;
+  overflow-x: hidden;
+}
+
+/* Sidebar */
+.admin aside {
+  width: 220px;
+  min-width: 220px;
+  height: 100vh;
+
+  position: sticky;
+  top: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 20px 16px;
+
+  background: #c68b3c;
+  color: #4b2c20;
+
+  overflow: hidden;
+}
+
+/* Logo */
+.admin-brand {
+  width: 100%;
+  height: 125px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 4px 0 20px;
+  flex-shrink: 0;
+}
+
+.admin-logo {
+  display: block;
+
+  width: 190px !important;
+  max-width: 100% !important;
+  height: 120px !important;
+  max-height: 120px !important;
+
+  object-fit: contain;
+}
+
+/* Menu */
+.admin aside nav {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  flex: 1;
+}
+
+.admin aside nav button {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  padding: 11px 13px;
+
+  border: 0;
+  border-radius: 8px;
+
+  background: transparent;
+  color: #4b2c20;
+
+  font-family: Inter, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+
+  text-align: left;
+  cursor: pointer;
+
+  transition: background 0.15s ease;
+}
+
+.admin aside nav button:hover {
+  background: rgba(75, 44, 32, 0.08);
+}
+
+.admin aside nav button.active {
+  background: rgba(75, 44, 32, 0.16);
+  color: #3b2118;
+  font-weight: 700;
+}
+
+/* Sair */
+.admin aside .logout {
+  width: 100%;
+
+  margin-top: auto;
+
+  padding: 11px 14px;
+
+  border: 1px solid rgba(75, 44, 32, 0.35);
+  border-radius: 8px;
+
+  background: transparent;
+  color: #4b2c20;
+
+  font-family: Inter, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.admin aside .logout:hover {
+  background: rgba(75, 44, 32, 0.08);
+}
+
+/* Área principal */
+.admin > section {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+
+  padding: 28px 26px;
+
+  overflow-x: hidden;
+}
+
+/* Notebook */
+@media (max-width: 1100px) {
+  .admin {
+    grid-template-columns: 190px minmax(0, 1fr);
+  }
+
+  .admin aside {
+    width: 190px;
+    min-width: 190px;
+
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .admin-logo {
+    width: 150px !important;
+    height: 95px !important;
+  }
+}
+/* LOGO DA TELA DE LOGIN */
+.login form {
+  overflow: hidden;
+}
+
+.login-logo {
+  display: block !important;
+  width: 280px !important;
+  max-width: 90% !important;
+  height: 190px !important;
+  max-height: 190px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  margin: 0 auto 22px !important;
+}
+/* =========================================================
+   TIPOGRAFIA ADMIN / LOGIN - VISUAL SaaS MAIS LEVE
+   ========================================================= */
+
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family:
+    Inter,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif !important;
+}
+
+/* Área administrativa */
+.admin,
+.admin * {
+  font-family:
+    Inter,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+}
+
+/* Título da página: Dashboard, Produtos etc */
+.admin > section > header h1 {
+  font-size: 25px;
+  line-height: 1.2;
+  font-weight: 600 !important;
+  letter-spacing: -0.025em;
+}
+
+/* "Administração" acima do título */
+.admin > section > header span {
+  font-size: 12px;
+  font-weight: 500 !important;
+  color: #77766f;
+}
+
+/* Menu lateral */
+.admin aside nav button {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0;
+}
+
+.admin aside nav button.active {
+  font-weight: 600 !important;
+}
+
+/* Usuário logado */
+.user-chip {
+  font-size: 14px;
+  font-weight: 600 !important;
+}
+
+.user-chip small {
+  font-size: 12px;
+  font-weight: 400 !important;
+}
+
+/* Cards */
+.panel h2 {
+  font-size: 16px;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em;
+}
+
+.panel p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.55;
+}
+
+/* Dashboard */
+.metrics article span {
+  font-size: 13px;
+  font-weight: 400 !important;
+}
+
+.metrics article strong {
+  font-size: 23px;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em;
+}
+
+.metrics article small {
+  font-size: 12px;
+  font-weight: 400 !important;
+}
+
+/* Inputs */
+label {
+  font-size: 13px;
+  font-weight: 500 !important;
+}
+
+input,
+select,
+textarea {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}
+
+/* Botões */
+button {
+  font-weight: 500 !important;
+}
+
+/* Botão principal */
+.login button[type="submit"],
+.login form > button:not(.password-toggle) {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+/* LOGIN */
+.login,
+.login * {
+  font-family:
+    Inter,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif !important;
+}
+
+.login label {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #453c36 !important;
+}
+
+.login input {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: #25211e !important;
+}
+
+.login input[type="email"] {
+  font-weight: 400 !important;
+}
+
+/* Tabelas */
+table,
+table * {
+  font-family:
+    Inter,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif !important;
+}
+
+table th {
+  font-size: 11px;
+  font-weight: 600 !important;
+  letter-spacing: 0.025em;
+}
+
+table td {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+table td strong {
+  font-weight: 600 !important;
+}
