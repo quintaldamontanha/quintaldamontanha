@@ -157,7 +157,30 @@ function Home() {
   const welcomeRef = useRef<HTMLDialogElement>(null)
   const infoRef = useRef<HTMLDialogElement>(null)
   useEffect(() => { welcomeRef.current?.showModal() }, [])
-  const openInfo = (name: string) => { setMenuOpen(false); setInfo(name); infoRef.current?.showModal() }
+  const reserveRef = useRef<HTMLDialogElement>(null)
+  const [guestName, setGuestName] = useState('')
+  const [guestContact, setGuestContact] = useState('')
+  const [reserveBusy, setReserveBusy] = useState(false)
+  const [reserveError, setReserveError] = useState('')
+  const [reserveSent, setReserveSent] = useState(false)
+  const reserveLock = useRef(false)
+  const requestId = useRef<string | null>(null)
+  const openReserve = () => { setMenuOpen(false); setReserveError(''); reserveRef.current?.showModal() }
+  const submitReserve = async (event: FormEvent) => {
+    event.preventDefault()
+    if (reserveLock.current || reserveSent) return
+    const name = guestName.trim(), phone = guestContact.replace(/\D/g, '')
+    if (name.length < 2 || phone.length < 10 || phone.length > 13) { setReserveError('Informe seu nome e um telefone com DDD válido.'); return }
+    reserveLock.current = true; setReserveBusy(true); setReserveError('')
+    if (!requestId.current) requestId.current = crypto.randomUUID()
+    try {
+      const { error } = await supabase.from('reservations').insert({ id: requestId.current, customer_name: name, phone, event_id: '14431ae0-9398-47de-93e8-a49b43e2203d', reservation_date: '2026-10-31', reservation_time: '19:30', party_size: 1, status: 'pending', notes: 'Solicitação pelo site: Jantar Dançante - R$ 90,00 por pessoa.' })
+      if (error && error.code !== '23505') throw error
+      setReserveSent(true)
+    } catch { setReserveError('Não foi possível enviar sua solicitação. Tente novamente. Seus dados continuam preenchidos.') }
+    finally { setReserveBusy(false); reserveLock.current = false }
+  }
+  const openInfo = (name: string) => { setMenuOpen(false); if (name === 'Reservas') { openReserve(); return }; if (name === 'Eventos') { document.getElementById('eventos')?.scrollIntoView({ behavior: 'smooth' }); return }; setInfo(name); infoRef.current?.showModal() }
   return (
     <main className="construction">
       <style>{`
@@ -177,6 +200,8 @@ function Home() {
 @media(prefers-reduced-motion:reduce){.construction .forest-tree-sway{animation:none}}
 
 .home-header{position:fixed;top:0;left:0;right:0;z-index:30;height:90px;background:#4b2c20;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 24px;box-shadow:0 2px 15px #0002}.home-brand img{width:135px;height:80px;object-fit:contain}.home-menu-toggle{justify-self:start;background:none;border:0;color:#f4ead5;font-size:25px;padding:12px;cursor:pointer}.home-menu-link{justify-self:end;color:#f4ead5;border:1px solid #d7b56d60;border-radius:24px;padding:10px 15px;font:12px Arial,sans-serif}.home-menu{position:absolute;top:100%;left:0;right:0;background:#4b2c20;padding:10px 24px 20px;display:grid}.home-menu button{padding:16px 10px;text-align:left;background:none;color:#f4ead5;border:0;border-bottom:1px solid #ffffff20;font:15px Arial,sans-serif;cursor:pointer}.home-dialog{position:fixed;padding:0;border:1px solid #d7b56d70;border-radius:20px;width:min(440px,calc(100% - 32px));max-height:90dvh;overflow:auto;background:#f6f2e9;color:#4b2c20;text-align:center;box-shadow:0 25px 90px #0005}.home-dialog::backdrop{background:#10160fa6;backdrop-filter:blur(5px)}.home-close{position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:50%;border:1px solid #ffffff60;background:#ffffff20;color:#fff;font-size:25px;cursor:pointer}.home-welcome-logo{background:#4b2c20;padding:20px}.home-welcome-logo img{width:210px;height:145px;object-fit:contain}.home-dialog-copy{padding:35px 26px 28px}.home-dialog-copy small{font:9px Arial,sans-serif;letter-spacing:2px;color:#997345}.home-dialog-copy h2{font:30px/1.2 Georgia,serif;margin:20px 0}.home-dialog-copy h2 em{color:#aa742f}.home-dialog-copy p{font:13px/1.7 Arial,sans-serif;color:#8b796e}.home-dialog-copy>button{background:#4b2c20;color:#fff4df;border:0;border-radius:10px;padding:15px;width:100%;margin-top:15px;font:13px Arial,sans-serif;cursor:pointer}.info-close{color:#4b2c20;border-color:#d7c6b4}.construction>.construction-logo{display:none}@media(max-width:600px){.home-header{height:80px;padding:0 12px}.home-brand img{width:125px;height:70px}.home-menu-link{font-size:10px;padding:9px 12px}.home-dialog-copy h2{font-size:27px}}
+
+.home-events{width:min(880px,100%);margin:40px auto 10px;scroll-margin-top:110px}.event-eyebrow{font:10px Arial,sans-serif;letter-spacing:2px;color:#d7b56d}.construction .home-events h1{font-size:32px;margin:12px 0 24px}.dinner-card{display:grid;grid-template-columns:190px 1fr;border:1px solid #d7b56d70;border-radius:20px;background:#f6f2e9;color:#4b2c20;overflow:hidden;text-align:left;box-shadow:0 20px 45px #0003}.event-date{display:flex;flex-direction:column;justify-content:center;align-items:center;background:#4b2c20;color:#e9ce99;padding:30px}.event-date strong{font:76px Georgia,serif}.event-date span{font:10px Arial,sans-serif;letter-spacing:2px;margin-top:10px}.event-details{padding:30px}.event-details .event-eyebrow{color:#a57637}.event-details h2{font:32px Georgia,serif;margin:12px 0}.event-details p{font:14px/1.6 Arial,sans-serif;color:#8b796e}.event-price{font:28px Georgia,serif;margin:20px 0}.event-price small{font:12px Arial,sans-serif;color:#8b796e}.event-reserve,.reserve-dialog form>button{width:100%;border:0;background:#4b2c20;color:#fff4df;padding:15px;border-radius:10px;font:14px Arial,sans-serif;cursor:pointer}.reserve-dialog label{display:grid;text-align:left;gap:7px;margin:15px 0;font:13px Arial,sans-serif}.reserve-dialog input{width:100%;padding:13px;border:1px solid #d9cbbb;border-radius:9px;background:white;color:#4b2c20;font:16px Arial,sans-serif}.reserve-dialog .reserve-note{font-size:11px;text-align:left}.reserve-dialog .reserve-error{color:#9e3024;background:#f9e4db;padding:10px;border-radius:8px}.reserve-dialog button:disabled{opacity:.6;cursor:wait}.reserve-dialog .home-dialog-copy{padding-top:42px}@media(max-width:600px){.dinner-card{grid-template-columns:1fr}.event-date{padding:18px;flex-direction:row;gap:18px}.event-date strong{font-size:48px}.event-date span{margin:0}.event-details{padding:25px}.event-details h2{font-size:30px}.home-events{margin-top:30px}}
 `}</style>
       <header className="home-header">
         <button className="home-menu-toggle" aria-label="Abrir menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>☰</button>
@@ -193,8 +218,17 @@ function Home() {
       <QuintalVegetation />
       <img className="construction-logo" src={logoBranco} alt="Quintal da Montanha" />
       <QuintalSwing label="Movimentar o balanço do Quintal da Montanha" />
-      <h1>Site em Construção</h1>
       <p className="construction-hint">Toque no balanço e aproveite a brisa.</p>
+      <section className="home-events" id="eventos" aria-labelledby="events-title">
+        <p className="event-eyebrow">BONS ENCONTROS NO QUINTAL</p><h1 id="events-title">Próximos eventos</h1>
+        <article className="dinner-card"><div className="event-date"><strong>31</strong><span>OUTUBRO · 2026</span></div><div className="event-details"><span className="event-eyebrow">GASTRONOMIA E MÚSICA</span><h2>Jantar Dançante</h2><p>31 de outubro · A partir das 19h30</p><div className="event-price">R$ 90,00 <small>por pessoa</small></div><button className="event-reserve" onClick={openReserve}>Reservar</button></div></article>
+      </section>
+      <dialog ref={reserveRef} className="home-dialog reserve-dialog" aria-labelledby="reserve-title" onCancel={event => { if (reserveBusy) event.preventDefault() }}>
+        <button className="home-close info-close" aria-label="Fechar reserva" disabled={reserveBusy} onClick={() => reserveRef.current?.close()}>×</button>
+        <div className="home-dialog-copy"><small>QUINTAL DA MONTANHA</small><h2 id="reserve-title">{reserveSent ? 'Solicitação recebida!' : 'Reserve seu lugar'}</h2>
+        {reserveSent ? <><p>Recebemos sua solicitação para o Jantar Dançante. Nossa equipe entrará em contato para confirmar a disponibilidade.</p><button onClick={() => reserveRef.current?.close()}>Fechar</button></> : <><p>Jantar Dançante<br />31/10/2026, a partir das 19h30<br /><strong>R$ 90,00 por pessoa</strong></p><form onSubmit={submitReserve}><label htmlFor="guest-name">Nome<input id="guest-name" autoComplete="name" required minLength={2} maxLength={120} value={guestName} onChange={event => setGuestName(event.target.value)} disabled={reserveBusy} /></label><label htmlFor="guest-contact">Contato (WhatsApp com DDD)<input id="guest-contact" type="tel" autoComplete="tel" inputMode="tel" placeholder="(48) 99999-9999" required maxLength={22} value={guestContact} onChange={event => setGuestContact(event.target.value)} disabled={reserveBusy} /></label><p className="reserve-note">Solicitação para 1 pessoa, sujeita à confirmação da equipe. Usaremos seu contato para tratar desta reserva.</p>{reserveError && <p className="reserve-error" role="alert">{reserveError}</p>}<button type="submit" disabled={reserveBusy}>{reserveBusy ? 'Enviando...' : 'Solicitar reserva'}</button></form></>}
+        </div>
+      </dialog>
     </main>
   )
 }
