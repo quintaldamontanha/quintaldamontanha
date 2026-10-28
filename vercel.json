@@ -1,5 +1,16 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/cardapio",
+      "destination": "/cardapio/index.html"
+    },
+    {
+      "source": "/cardapio/",
+      "destination": "/cardapio/index.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }
