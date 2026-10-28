@@ -1,0 +1,44 @@
+<svg viewBox="0 0 900 550" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Balanço do Quintal da Montanha">
+        <defs>
+          <linearGradient id="quintal-wood" x1="0" x2="1">
+            <stop stop-color="#352619" /><stop offset=".25" stop-color="#9b8058" />
+            <stop offset=".5" stop-color="#6d5437" /><stop offset=".78" stop-color="#a88d62" /><stop offset="1" stop-color="#392b1c" />
+          </linearGradient>
+          <linearGradient id="quintal-seat" x1="0" y1="0" x2="0" y2="1">
+            <stop stop-color="#c0a77c" /><stop offset="1" stop-color="#80613e" />
+          </linearGradient>
+
+        </defs>
+        <ellipse cx="450" cy="511" rx="231" ry="15" fill="#000" opacity=".23" />
+        <g fill="url(#quintal-wood)" stroke="#463421" stroke-width="2">
+          <path d="M201 96 Q214 89 233 94 L224 507 Q213 518 192 508Z" />
+          <path d="M664 92 Q684 87 697 97 L706 505 Q686 515 675 507Z" />
+          <path d="M171 76 Q442 63 728 77 L732 112 Q456 103 173 113Z" />
+        </g>
+        <g stroke="#302f29" stroke-width="9" fill="none">
+          <path d="M212 76 L212 111" /><path d="M687 76 L687 112" />
+          <path d="M268 85 L268 111" /><path d="M632 85 L632 111" />
+        </g>
+        <g stroke="#8d8b7c" stroke-width="4" fill="none">
+          <path d="M425 110V142M477 110V142M427 236V258M475 236V258" />
+        </g>
+        <path d="M450 131 L494 153 L509 196 L484 237 L450 251 L411 232 L394 192 L410 151Z" fill="#a39270" stroke="#544635" stroke-width="5" />
+        <path d="M450 142 L486 161 L496 194 L477 227 L450 238 L420 223 L407 192 L421 160Z" fill="#343c2e" />
+        <g fill="none" stroke="#e9dfc5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="450" cy="172" r="11" />
+          <path d="M450 151v-5M433 155l-4-4M467 155l4-4M427 172h-5M473 172h5M419 210l23-25 27 31M452 199l18-18 20 24M438 206v18h17v-18Z" />
+        </g>
+        <path d="M384 258 L516 255 L519 300 L383 304Z" fill="#3c3022" stroke="#b49b70" stroke-width="2" />
+        <g fill="#e9dfc5" text-anchor="middle" font-family="Georgia,serif" font-size="16">
+          <text x="451" y="276">QUINTAL DA</text><text x="451" y="295">MONTANHA</text>
+        </g>
+        <g fill="none" stroke="#d0c9af" stroke-width="5" stroke-linecap="round">
+          <path d="M268 110 L268 453" />
+          <path d="M632 110 L632 445" />
+        </g>
+        <g>
+          <path d="M249 446 Q432 450 646 435 L659 458 Q443 474 247 471Z" fill="url(#quintal-seat)" stroke="#59452e" stroke-width="2" />
+          <path d="M247 471 Q452 475 659 458 L657 472 Q442 490 248 483Z" fill="#62482e" />
+          <g stroke="#6a5133" stroke-width="1.4" opacity=".8"><path d="M273 454Q450 462 630 445M272 461Q443 469 638 452M323 448l7 23M550 444l-3 23" /></g>
+        </g>
+      </svg>
