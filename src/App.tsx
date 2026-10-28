@@ -152,10 +152,16 @@ function QuintalSwing({ label }: { label: string }) {
 }
 
 function Home() {
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [info, setInfo] = useState('')
+  const welcomeRef = useRef<HTMLDialogElement>(null)
+  const infoRef = useRef<HTMLDialogElement>(null)
+  useEffect(() => { welcomeRef.current?.showModal() }, [])
+  const openInfo = (name: string) => { setMenuOpen(false); setInfo(name); infoRef.current?.showModal() }
   return (
     <main className="construction">
       <style>{`
-.construction{position:relative;isolation:isolate;min-height:100svh;overflow:hidden;background:#263323;color:#f4ead5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 18px 40px;text-align:center}
+.construction{padding-top:120px!important;position:relative;isolation:isolate;min-height:100svh;overflow:hidden;background:#263323;color:#f4ead5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 18px 40px;text-align:center}
 .construction .quintal-forest{position:absolute;inset:0;z-index:-2;pointer-events:none}
 .construction .quintal-forest>svg{width:100%;height:100%;position:absolute;inset:0}
 .construction::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(#10160f44,transparent 65%,#10160f55)}
@@ -169,7 +175,21 @@ function Home() {
 @keyframes construction-breeze{from{transform:rotate(-1deg)}to{transform:rotate(1deg)}}
 @media(max-width:600px){.construction{padding:36px 12px;justify-content:center}.construction .quintal-swing{width:145%;max-width:620px;flex-shrink:0;margin:20px -22.5%}.construction-logo{width:170px}.construction h1{margin-top:24px}}
 @media(prefers-reduced-motion:reduce){.construction .forest-tree-sway{animation:none}}
+
+.home-header{position:fixed;top:0;left:0;right:0;z-index:30;height:90px;background:#4b2c20;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 24px;box-shadow:0 2px 15px #0002}.home-brand img{width:135px;height:80px;object-fit:contain}.home-menu-toggle{justify-self:start;background:none;border:0;color:#f4ead5;font-size:25px;padding:12px;cursor:pointer}.home-menu-link{justify-self:end;color:#f4ead5;border:1px solid #d7b56d60;border-radius:24px;padding:10px 15px;font:12px Arial,sans-serif}.home-menu{position:absolute;top:100%;left:0;right:0;background:#4b2c20;padding:10px 24px 20px;display:grid}.home-menu button{padding:16px 10px;text-align:left;background:none;color:#f4ead5;border:0;border-bottom:1px solid #ffffff20;font:15px Arial,sans-serif;cursor:pointer}.home-dialog{position:fixed;padding:0;border:1px solid #d7b56d70;border-radius:20px;width:min(440px,calc(100% - 32px));max-height:90dvh;overflow:auto;background:#f6f2e9;color:#4b2c20;text-align:center;box-shadow:0 25px 90px #0005}.home-dialog::backdrop{background:#10160fa6;backdrop-filter:blur(5px)}.home-close{position:absolute;right:14px;top:14px;width:34px;height:34px;border-radius:50%;border:1px solid #ffffff60;background:#ffffff20;color:#fff;font-size:25px;cursor:pointer}.home-welcome-logo{background:#4b2c20;padding:20px}.home-welcome-logo img{width:210px;height:145px;object-fit:contain}.home-dialog-copy{padding:35px 26px 28px}.home-dialog-copy small{font:9px Arial,sans-serif;letter-spacing:2px;color:#997345}.home-dialog-copy h2{font:30px/1.2 Georgia,serif;margin:20px 0}.home-dialog-copy h2 em{color:#aa742f}.home-dialog-copy p{font:13px/1.7 Arial,sans-serif;color:#8b796e}.home-dialog-copy>button{background:#4b2c20;color:#fff4df;border:0;border-radius:10px;padding:15px;width:100%;margin-top:15px;font:13px Arial,sans-serif;cursor:pointer}.info-close{color:#4b2c20;border-color:#d7c6b4}.construction>.construction-logo{display:none}@media(max-width:600px){.home-header{height:80px;padding:0 12px}.home-brand img{width:125px;height:70px}.home-menu-link{font-size:10px;padding:9px 12px}.home-dialog-copy h2{font-size:27px}}
 `}</style>
+      <header className="home-header">
+        <button className="home-menu-toggle" aria-label="Abrir menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>☰</button>
+        <a href="/" className="home-brand"><img src={logoBranco} alt="Quintal da Montanha" /></a>
+        <a href="/cardapio" className="home-menu-link">Cardápio</a>
+        {menuOpen && <nav className="home-menu">{['Eventos', 'Reservas', 'Contato'].map(name => <button key={name} onClick={() => openInfo(name)}>{name}</button>)}</nav>}
+      </header>
+      <dialog ref={welcomeRef} className="home-dialog" onCancel={() => welcomeRef.current?.close()}>
+        <button className="home-close" aria-label="Fechar boas-vindas" onClick={() => welcomeRef.current?.close()}>×</button>
+        <div className="home-welcome-logo"><img src={logoBranco} alt="Quintal da Montanha" /></div>
+        <div className="home-dialog-copy"><small>CHEGUE MAIS, A CASA É SUA</small><h2>Seja bem-vindo ao<br /><em>Quintal da Montanha!</em></h2><p>Seu lugar para brindar, compartilhar e colecionar bons momentos.</p><button onClick={() => welcomeRef.current?.close()}>Conhecer o Quintal</button></div>
+      </dialog>
+      <dialog ref={infoRef} className="home-dialog"><button className="home-close info-close" aria-label="Fechar informações" onClick={() => infoRef.current?.close()}>×</button><div className="home-dialog-copy"><small>QUINTAL DA MONTANHA</small><h2>{info}</h2><p>{info === 'Eventos' ? 'A programação de eventos será divulgada aqui em breve.' : info === 'Reservas' ? 'O canal de reservas online será disponibilizado aqui em breve. Consulte nossa equipe para saber a disponibilidade.' : 'Os canais de contato do Quintal serão disponibilizados aqui em breve.'}</p><button onClick={() => infoRef.current?.close()}>Voltar ao Quintal</button></div></dialog>
       <QuintalVegetation />
       <img className="construction-logo" src={logoBranco} alt="Quintal da Montanha" />
       <QuintalSwing label="Movimentar o balanço do Quintal da Montanha" />
