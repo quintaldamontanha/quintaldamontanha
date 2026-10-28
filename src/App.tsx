@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from 'react'
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import type { Session } from '@supabase/supabase-js'
 import { supabase } from './lib/supabase'
@@ -13,17 +13,168 @@ const money = (v: any) =>
 const today = () => new Date().toISOString().slice(0, 10)
 type Row = Record<string, any>
 
+function QuintalVegetation() {
+  const trees = Array.from({ length: 33 }, (_, i) => ({
+    x: i * 53 - 48, y: 580 + Math.sin(i * 2.7) * 48,
+    size: .8 + (Math.sin(i * 5.1) + 1) * .35,
+  }))
+  return (
+    <div className="quintal-forest" aria-hidden="true">
+      <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <defs>
+          <linearGradient id="forest-sky" x1="0" y1="0" x2="0" y2="1">
+            <stop stopColor="#10160f" /><stop offset=".5" stopColor="#38442e" /><stop offset="1" stopColor="#738057" />
+          </linearGradient>
+          <radialGradient id="forest-light"><stop stopColor="#d8d2a2" stopOpacity=".18" /><stop offset="1" stopColor="#c5c59a" stopOpacity="0" /></radialGradient>
+          <g id="quintal-tree">
+            <path d="M0 65 Q-5-40 3-188M1-78L-37-126M2-111L40-166" fill="none" stroke="currentColor" strokeWidth="8" />
+            <ellipse cx="1" cy="-184" rx="45" ry="64" fill="currentColor" />
+            <ellipse cx="-33" cy="-139" rx="43" ry="50" fill="currentColor" />
+            <ellipse cx="34" cy="-145" rx="43" ry="56" fill="currentColor" />
+          </g>
+          <g id="quintal-fern" fill="currentColor">
+            <path d="M0 0Q-18-92-74-164Q-28-129 0-16Q28-129 74-164Q18-92 0 0" />
+            {Array.from({ length: 7 }, (_, i) => {
+              const y = -22 - i * 17, x = 3 + i * 6
+              return <g key={i}><path d={`M${-x} ${y} Q${-x-72+i*5} ${y-44} ${-x-45} ${y+1} Q${-x-18} ${y+11} ${-x} ${y}`} /><path d={`M${x} ${y} Q${x+72-i*5} ${y-44} ${x+45} ${y+1} Q${x+18} ${y+11} ${x} ${y}`} /></g>
+            })}
+          </g>
+        </defs>
+        <path fill="url(#forest-sky)" d="M0 0h1600v900H0z" />
+        <ellipse cx="800" cy="425" rx="680" ry="480" fill="url(#forest-light)" />
+        <g color="#44563b" opacity=".85">{trees.map((tree, i) => <use key={i} href="#quintal-tree" transform={`translate(${tree.x} ${tree.y}) scale(${tree.size})`} />)}</g>
+        <path d="M0 646Q300 583 572 627T1094 629T1600 611V900H0Z" fill="#6d7750" />
+        <path d="M0 735Q366 654 800 703T1600 689V900H0Z" fill="#72764c" />
+        <g color="#283d2b">{[-80, 30, 150, 1460, 1580, 1670].map((x, i) => <g key={x} transform={`translate(${x} 690) scale(2.4)`}><g className="forest-tree-sway" style={{ animationDelay: `${-i * 1.8}s` }}><use href="#quintal-tree" /></g></g>)}</g>
+      </svg>
+    </div>
+  )
+}
+
+function QuintalSwing({ label }: { label: string }) {
+  const seatRef = useRef<SVGGElement>(null)
+  const leftRef = useRef<SVGPathElement>(null)
+  const rightRef = useRef<SVGPathElement>(null)
+  const pushRef = useRef<() => void>(() => {})
+
+  useEffect(() => {
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let frame = 0
+    let previous = 0
+    let position = 0
+    let velocity = 0
+    let breeze = 0
+    const paint = () => {
+      const x = Math.sin(position + breeze) * 110
+      const y = (1 - Math.cos(position + breeze)) * -150
+      seatRef.current?.setAttribute('transform', `translate(${x} ${y})`)
+      leftRef.current?.setAttribute('d', `M268 110 L${268 + x} ${453 + y}`)
+      rightRef.current?.setAttribute('d', `M632 110 L${632 + x} ${445 + y}`)
+    }
+    const tick = (time: number) => {
+      const dt = previous ? Math.min((time - previous) / 16.667, 2) : 1
+      previous = time
+      velocity += (-position * .009 - velocity * .025) * dt
+      position += velocity * dt
+      breeze = Math.sin(time * .0011) * .045
+      paint()
+      frame = requestAnimationFrame(tick)
+    }
+    pushRef.current = () => {
+      if (preference.matches) return
+      velocity = Math.max(-.035, Math.min(.035, velocity + (position > 0 ? -.022 : .022)))
+      if (!frame) frame = requestAnimationFrame(tick)
+    }
+    const syncMotion = () => {
+      cancelAnimationFrame(frame)
+      frame = 0; previous = 0; position = 0; velocity = 0; breeze = 0; paint()
+      if (!preference.matches) frame = requestAnimationFrame(tick)
+    }
+    syncMotion()
+    preference.addEventListener('change', syncMotion)
+    return () => {
+      cancelAnimationFrame(frame)
+      preference.removeEventListener('change', syncMotion)
+      pushRef.current = () => {}
+    }
+  }, [])
+
+  return (
+    <button className="quintal-swing" type="button" aria-label={label}
+      onPointerEnter={event => { if (event.pointerType === 'mouse') pushRef.current() }}
+      onClick={() => pushRef.current()}>
+      <svg viewBox="0 0 900 550" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="quintal-wood" x1="0" x2="1">
+            <stop stopColor="#352619" /><stop offset=".25" stopColor="#9b8058" />
+            <stop offset=".5" stopColor="#6d5437" /><stop offset=".78" stopColor="#a88d62" /><stop offset="1" stopColor="#392b1c" />
+          </linearGradient>
+          <linearGradient id="quintal-seat" x1="0" y1="0" x2="0" y2="1">
+            <stop stopColor="#c0a77c" /><stop offset="1" stopColor="#80613e" />
+          </linearGradient>
+
+        </defs>
+        <ellipse cx="450" cy="511" rx="231" ry="15" fill="#000" opacity=".23" />
+        <g fill="url(#quintal-wood)" stroke="#463421" strokeWidth="2">
+          <path d="M201 96 Q214 89 233 94 L224 507 Q213 518 192 508Z" />
+          <path d="M664 92 Q684 87 697 97 L706 505 Q686 515 675 507Z" />
+          <path d="M171 76 Q442 63 728 77 L732 112 Q456 103 173 113Z" />
+        </g>
+        <g stroke="#302f29" strokeWidth="9" fill="none">
+          <path d="M212 76 L212 111" /><path d="M687 76 L687 112" />
+          <path d="M268 85 L268 111" /><path d="M632 85 L632 111" />
+        </g>
+        <g stroke="#8d8b7c" strokeWidth="4" fill="none">
+          <path d="M425 110V142M477 110V142M427 236V258M475 236V258" />
+        </g>
+        <path d="M450 131 L494 153 L509 196 L484 237 L450 251 L411 232 L394 192 L410 151Z" fill="#a39270" stroke="#544635" strokeWidth="5" />
+        <path d="M450 142 L486 161 L496 194 L477 227 L450 238 L420 223 L407 192 L421 160Z" fill="#343c2e" />
+        <g fill="none" stroke="#e9dfc5" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="450" cy="172" r="11" />
+          <path d="M450 151v-5M433 155l-4-4M467 155l4-4M427 172h-5M473 172h5M419 210l23-25 27 31M452 199l18-18 20 24M438 206v18h17v-18Z" />
+        </g>
+        <path d="M384 258 L516 255 L519 300 L383 304Z" fill="#3c3022" stroke="#b49b70" strokeWidth="2" />
+        <g fill="#e9dfc5" textAnchor="middle" fontFamily="Georgia,serif" fontSize="16">
+          <text x="451" y="276">QUINTAL DA</text><text x="451" y="295">MONTANHA</text>
+        </g>
+        <g fill="none" stroke="#d0c9af" strokeWidth="5" strokeLinecap="round">
+          <path ref={leftRef} d="M268 110 L268 453" />
+          <path ref={rightRef} d="M632 110 L632 445" />
+        </g>
+        <g ref={seatRef}>
+          <path d="M249 446 Q432 450 646 435 L659 458 Q443 474 247 471Z" fill="url(#quintal-seat)" stroke="#59452e" strokeWidth="2" />
+          <path d="M247 471 Q452 475 659 458 L657 472 Q442 490 248 483Z" fill="#62482e" />
+          <g stroke="#6a5133" strokeWidth="1.4" opacity=".8"><path d="M273 454Q450 462 630 445M272 461Q443 469 638 452M323 448l7 23M550 444l-3 23" /></g>
+        </g>
+      </svg>
+    </button>
+  )
+}
+
 function Home() {
   return (
-    <main className="hero">
-      <div className="overlay">
-        <p className="eyebrow">QUINTA DA MONTANHA</p>
-        <h1>Gastronomia, natureza e bons momentos em um só lugar.</h1>
-        <p>Uma experiência acolhedora entre montanhas, sabores e encontros especiais.</p>
-        <div className="actions">
-          <a href="/admin">Área administrativa</a>
-        </div>
-      </div>
+    <main className="construction">
+      <style>{`
+.construction{position:relative;isolation:isolate;min-height:100svh;overflow:hidden;background:#263323;color:#f4ead5;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 18px 40px;text-align:center}
+.construction .quintal-forest{position:absolute;inset:0;z-index:-2;pointer-events:none}
+.construction .quintal-forest>svg{width:100%;height:100%;position:absolute;inset:0}
+.construction::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(#10160f44,transparent 65%,#10160f55)}
+.construction-logo{display:block;width:clamp(145px,20vw,210px);height:auto;margin:0 auto 12px}
+.construction .quintal-swing{display:block;width:min(760px,100%);padding:0;margin:0;border:0;background:transparent;cursor:pointer;filter:drop-shadow(0 16px 16px #0004);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.construction .quintal-swing svg{display:block;width:100%;height:auto;overflow:visible}
+.construction .quintal-swing:focus-visible{outline:2px solid #fff;outline-offset:5px;border-radius:10px}
+.construction h1{font:400 clamp(30px,4.5vw,54px)/1.2 Georgia,serif;letter-spacing:-.02em;margin:8px 0 14px;text-shadow:0 2px 16px #102015}
+.construction-hint{margin:0;color:#f0e8d1;font:12px/1.6 system-ui,sans-serif;letter-spacing:.08em}
+.forest-tree-sway{transform-origin:0 60px;animation:construction-breeze 8s ease-in-out infinite alternate}
+@keyframes construction-breeze{from{transform:rotate(-1deg)}to{transform:rotate(1deg)}}
+@media(max-width:600px){.construction{padding:36px 12px;justify-content:center}.construction .quintal-swing{width:145%;max-width:620px;flex-shrink:0;margin:20px -22.5%}.construction-logo{width:170px}.construction h1{margin-top:24px}}
+@media(prefers-reduced-motion:reduce){.construction .forest-tree-sway{animation:none}}
+`}</style>
+      <QuintalVegetation />
+      <img className="construction-logo" src={logoBranco} alt="Quintal da Montanha" />
+      <QuintalSwing label="Movimentar o balanço do Quintal da Montanha" />
+      <h1>Site em Construção</h1>
+      <p className="construction-hint">Toque no balanço e aproveite a brisa.</p>
     </main>
   )
 }
